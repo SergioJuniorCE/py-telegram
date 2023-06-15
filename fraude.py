@@ -152,7 +152,7 @@ def text_analysis():
     pyautogui.hotkey('ctrl', 'v')
     time.sleep(1)
     pyautogui.write(f"Mision {numero} completada")
-    # pyautogui.press('enter')
+    pyautogui.press('enter')
     
     # Buscar la cantidad de minutos en el texto
     patron = r"Tiempo de tarea (\d+) minutos"
