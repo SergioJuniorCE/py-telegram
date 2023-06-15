@@ -87,6 +87,18 @@ def ocr():
     pyautogui.press('enter')
 
 
+def locate_in_screen(filename, confidence=0.9):
+    try:
+        location = pyautogui.locateOnScreen(filename, confidence=confidence)
+        if location is None:
+            pyautogui.alert(f"{filename} no encontrado")
+            return None
+        buttonx, buttony = pyautogui.center(location)
+        return buttonx, buttony
+    except Exception as e:
+        pyautogui.alert(f"{filename} no encontrado")
+        return None
+
 def text_analysis():
     # telegram on taskbar position
     open_telegram()
@@ -97,7 +109,9 @@ def text_analysis():
     time.sleep(0.5)
     for i in range(5):
         pyautogui.press('pagedown')
-    pyautogui.moveRel(0, 600)
+    buttonx, buttony = locate_in_screen('trompetas.png', confidence=0.95)
+    buttonx -= 400
+    pyautogui.move(buttonx, buttony)
     pyautogui.rightClick()
     pyautogui.moveRel(10, 30)
     pyautogui.click()
@@ -133,7 +147,7 @@ def text_analysis():
     pyautogui.hotkey('ctrl', 'v')
     time.sleep(1)
     pyautogui.write(f"Mision {numero} completada")
-    pyautogui.press('enter')
+    # pyautogui.press('enter')
     
     # Buscar la cantidad de minutos en el texto
     patron = r"Tiempo de tarea (\d+) minutos"
@@ -143,7 +157,12 @@ def text_analysis():
         minutos = int(coincidencia.group(1))
         segundos = minutos * 60
         print(segundos)
-        time.sleep(segundos)
+        segundos_restantes = 0
+        for _ in range(segundos):            
+            time.sleep(1)
+            segundos_restantes += 1
+            # Print tiempo restante en minutos y segundos
+            print(f"Tiempo restante: {minutos - (segundos_restantes // 60)} minutos y {(segundos - segundos_restantes) % 60} segundos")
         text_analysis()
 
 
