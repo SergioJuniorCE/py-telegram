@@ -16,7 +16,20 @@ Tener instalado:
 
 # Instalacion
 
-Una vez el repositorio descargado hay que instalar los modulos
+Una vez el repositorio descargado hay activar nuestro virtualenv
+
+Si no se tiene instalado Virtualenv se instala de la siguiente forma:
+	`pip install virtualenv`
+
+Creamos el virtualenv
+
+`python -m virtualenv env`
+
+Lo activamos si estamos en window con
+
+    `env\scripts\activate`
+
+Instalamos los modulos
 
 `pip install -r requirements.txt`
 
