@@ -6,9 +6,10 @@ import win32clipboard  # pip install pywin32
 from PIL import Image
 import re
 import webbrowser
+from tqdm import trange
 
 # Config
-pyautogui.PAUSE = 0.2
+# pyautogui.PAUSE = 0.2
 
 # Constants
 LINK_PNG = 'telegram-yt-link.png'
@@ -107,7 +108,7 @@ def text_analysis():
     # Pinned message on chat
     pyautogui.click(775, 110)
     time.sleep(0.5)
-    for i in range(5):
+    for _ in range(5):
         pyautogui.press('pagedown')
     buttonx, buttony = locate_in_screen('trompetas.png', confidence=0.95)
     buttonx -= 400
@@ -120,12 +121,16 @@ def text_analysis():
     mision_numero = re.search(r"Misión (\d+)", message_text)
     if mision_numero:
         numero = mision_numero.group(1)
-        print("Número de la misión:", numero)
+    else:
+        numero = ''
     
     enlace_youtube = re.search(r"(https?://(?:www\.)?youtube\.com/watch\?v=[A-Za-z0-9_-]+)", message_text)
     if enlace_youtube:
         link = enlace_youtube.group(1)
-        print("Enlace de YouTube:", link)
+    else:
+        print("Link no encontrado: esperando 20 minutos")
+        time.sleep(1200)
+        text_analysis()
         
     webbrowser.open(link)
     
@@ -155,14 +160,9 @@ def text_analysis():
 
     if coincidencia:
         minutos = int(coincidencia.group(1))
-        segundos = minutos * 60
-        print(segundos)
-        segundos_restantes = 0
-        for _ in range(segundos):            
+        segundos = (minutos * 60) - 8
+        for _ in trange(segundos):            
             time.sleep(1)
-            segundos_restantes += 1
-            # Print tiempo restante en minutos y segundos
-            print(f"Tiempo restante: {minutos - (segundos_restantes // 60)} minutos y {(segundos - segundos_restantes) % 60} segundos")
         text_analysis()
 
 
